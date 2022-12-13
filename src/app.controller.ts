@@ -1,10 +1,7 @@
-import {
-  Controller,
-  Get,
-  Render,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Query, Render } from '@nestjs/common';
 import { AppService } from './app.service';
 import db from './db';
+import { Macskak } from './macskak.dto';
 
 @Controller()
 export class AppController {
@@ -12,7 +9,12 @@ export class AppController {
 
   @Get()
   @Render('index')
-  index() {
-    return { message: 'Welcome to the homepage' };
+  async showMacska() {
+    const [rows] = await db.execute(
+      'SELECT id, suly, szem_szin FROM macskak ORDER BY suly DESC',
+    );
+    return {
+      macskak: rows,
+    };
   }
 }
